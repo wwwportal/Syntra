@@ -28,9 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 1
             );
             
-            // Calculate rotation (tilt into screen - reversed/push effect)
-            const rotateX = -(centerX / 3.5);
-            const rotateY = centerY / 3.5;
+            // Calculate rotation - PUSH into screen where mouse hovers
+            // When mouse is on left (centerX negative), push left side back (positive rotateY)
+            // When mouse is on top (centerY negative), push top side back (negative rotateX)
+            const rotateX = centerY / 3.5;  // Inverted: positive = push top back
+            const rotateY = -centerX / 3.5; // Inverted: negative = push left back
 
             // Calculate viewing angle for iridescence (how much the surface is tilted)
             const viewingAngle = Math.atan2(Math.abs(centerY), Math.abs(centerX)) * (180 / Math.PI);
@@ -53,9 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
             card.style.setProperty('--background-y', `${bgY}%`);
             card.style.setProperty('--viewing-angle', `${viewingAngle}deg`);
             card.style.setProperty('--tilt-intensity', tiltIntensity.toFixed(3));
-
-            // DEBUG: Add a visible indicator
-            card.style.border = '2px solid red';
         });
         
         card.addEventListener('mouseleave', () => {
@@ -70,9 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
             card.style.setProperty('--background-y', '50%');
             card.style.setProperty('--viewing-angle', '0deg');
             card.style.setProperty('--tilt-intensity', '0');
-
-            // Remove debug border
-            card.style.border = 'none';
         });
     });
 });
