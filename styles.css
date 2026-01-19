@@ -141,84 +141,281 @@ h1 {
 /* App Grid */
 .app-grid {
     flex: 1;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1.5rem;
-    padding: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2.5rem;
+    padding: 2rem;
     max-width: 1200px;
     margin: 0 auto;
     width: 100%;
+    perspective: 1000px;
 }
 
-/* App Card */
-.app-card {
-    background: var(--bg-secondary);
-    border-radius: 16px;
-    padding: 1.5rem;
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
+/* Tarot Card - Holographic Effect */
+.tarot-card {
+    --card-width: 220px;
+    --card-ratio: 1.6;
+    --card-radius: 12px;
+    
+    /* Soft opalescent/iridescent colors - pastel palette */
+    --holo-pink: hsl(320, 80%, 85%);
+    --holo-peach: hsl(30, 90%, 85%);
+    --holo-yellow: hsl(50, 90%, 85%);
+    --holo-mint: hsl(160, 70%, 82%);
+    --holo-cyan: hsl(185, 70%, 82%);
+    --holo-lavender: hsl(260, 70%, 88%);
+    --holo-violet: hsl(280, 60%, 85%);
+    
+    /* Dynamic values - updated by JS */
+    --pointer-x: 50%;
+    --pointer-y: 50%;
+    --pointer-from-center: 0;
+    --pointer-from-left: 0.5;
+    --pointer-from-top: 0.5;
+    --card-opacity: 0;
+    --rotate-x: 0deg;
+    --rotate-y: 0deg;
+    --background-x: 50%;
+    --background-y: 50%;
+    --viewing-angle: 0deg;
+    --tilt-intensity: 0;
+    
+    width: var(--card-width);
+    height: calc(var(--card-width) * var(--card-ratio));
+    cursor: pointer;
+    perspective: 600px;
+}
+
+.card-rotator {
+    display: block;
+    width: 100%;
+    height: 100%;
     text-decoration: none;
     color: inherit;
-    transition: all 0.2s ease;
-    border: 2px solid transparent;
+    transform-style: preserve-3d;
+    transform: rotateY(var(--rotate-x)) rotateX(var(--rotate-y));
+    transition: transform 0.15s ease-out;
 }
 
-.app-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(74, 69, 64, 0.1);
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 100%);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    transform-style: preserve-3d;
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.2),
+        0 8px 24px rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.3s ease;
 }
 
-.app-card.placeholder {
-    opacity: 0.5;
-    pointer-events: none;
-    border: 2px dashed var(--beige-dark);
-    background: transparent;
+.tarot-card:hover .card-inner {
+    box-shadow: 
+        0 0 3px -1px white,
+        0 0 3px 1px rgba(255, 200, 100, 0.5),
+        0 0 12px 2px rgba(100, 200, 255, 0.3),
+        0px 10px 20px -5px black,
+        0 0 40px -30px rgba(100, 200, 255, 0.5);
 }
 
-.app-icon {
-    width: 48px;
-    height: 48px;
-    background: var(--beige);
-    border-radius: 12px;
+/* Card image area */
+.card-image {
+    position: relative;
+    width: 100%;
+    height: 70%;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
+    background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.app-icon svg {
-    width: 24px;
-    height: 24px;
-    color: var(--accent);
+.card-placeholder {
+    width: 60%;
+    height: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.3;
 }
 
-.app-info {
-    flex: 1;
+.card-placeholder svg {
+    width: 100%;
+    height: 100%;
+    color: rgba(255, 255, 255, 0.5);
 }
 
-.app-info h2 {
-    font-size: 1.25rem;
+/* Card content */
+.card-content {
+    padding: 1rem;
+    text-align: center;
+}
+
+.card-title {
+    font-size: 1.1rem;
     font-weight: 600;
+    color: #fff;
     margin-bottom: 0.25rem;
+    letter-spacing: 0.02em;
 }
 
-.app-info p {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
+.card-description {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.4;
 }
 
-.app-arrow {
-    font-size: 1.25rem;
+/* 
+   HOLOGRAPHIC SHINE EFFECT
+   Soft opalescent/iridescent effect - pastel colors
+   Moves based on --background-x and --background-y
+*/
+.card-shine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    border-radius: var(--card-radius);
+    z-index: 3;
+    
+    /* Layered soft gradients for organic opal look */
+    background: 
+        /* Primary gradient - soft pastels */
+        repeating-linear-gradient(
+            115deg,
+            var(--holo-pink) 0%,
+            var(--holo-lavender) 8%,
+            var(--holo-cyan) 16%,
+            var(--holo-mint) 24%,
+            var(--holo-yellow) 32%,
+            var(--holo-peach) 40%,
+            var(--holo-pink) 48%
+        ),
+        /* Secondary gradient - adds depth */
+        repeating-linear-gradient(
+            -45deg,
+            var(--holo-violet) 0%,
+            var(--holo-cyan) 12%,
+            var(--holo-mint) 24%,
+            var(--holo-yellow) 36%,
+            var(--holo-violet) 48%
+        );
+    
+    background-size: 250% 250%, 200% 200%;
+    
+    /* Position shifts based on mouse */
+    background-position: 
+        calc(var(--background-x) * 1.5) calc(var(--background-y) * 1.5),
+        calc(var(--background-x) * -1) calc(var(--background-y) * -1);
+    
+    /* Softer blend for dreamy opal look */
+    filter: brightness(1) contrast(1) saturate(0.9) blur(0.5px);
+    mix-blend-mode: color-dodge;
+    background-blend-mode: soft-light;
+    
+    opacity: var(--card-opacity);
+    transition: opacity 0.3s ease-out;
+}
+
+/*
+   IRIDESCENT REFLECTION LAYER
+   Creates the opal-like light refraction effect
+   Changes color and intensity based on viewing angle and tilt
+*/
+.card-iridescent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    border-radius: var(--card-radius);
+    z-index: 2;
+
+    /* Dynamic iridescent effect based on viewing angle */
+    background:
+        /* Primary iridescence - shifts with viewing angle */
+        linear-gradient(
+            calc(var(--viewing-angle) + 45deg),
+            transparent 0%,
+            hsl(calc(320 + var(--rotate-y) * 10), 80%, 85%) 20%,
+            hsl(calc(185 + var(--rotate-x) * 15), 70%, 82%) 40%,
+            hsl(calc(160 + var(--rotate-y) * 5), 70%, 82%) 60%,
+            hsl(calc(50 + var(--rotate-x) * 8), 90%, 85%) 80%,
+            transparent 100%
+        ),
+        /* Secondary refraction - follows mouse position */
+        radial-gradient(
+            ellipse at var(--pointer-x) var(--pointer-y),
+            transparent 0%,
+            rgba(255, 255, 255, calc(0.08 + var(--tilt-intensity) * 0.1)) 25%,
+            rgba(255, 255, 255, calc(0.04 + var(--tilt-intensity) * 0.05)) 50%,
+            transparent 75%
+        );
+
+    /* Opal-like filter effects */
+    filter: blur(0.5px) brightness(calc(1 + var(--tilt-intensity) * 0.2)) saturate(calc(0.9 + var(--tilt-intensity) * 0.3));
+    mix-blend-mode: color-dodge;
+    opacity: calc(var(--card-opacity) * (0.4 + var(--tilt-intensity) * 0.3));
+    transition: opacity 0.4s ease-out;
+}
+
+/*
+   GLARE EFFECT
+   Simulates direct light reflection - follows pointer position directly
+*/
+.card-glare {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    border-radius: var(--card-radius);
+    z-index: 4;
+
+    /* Radial gradient centered on mouse position */
+    background-image: radial-gradient(
+        farthest-corner circle at var(--pointer-x) var(--pointer-y),
+        hsla(0, 0%, 100%, 0.6) 8%,
+        hsla(0, 0%, 100%, 0.3) 18%,
+        hsla(0, 0%, 0%, 0.4) 85%
+    );
+
+    mix-blend-mode: overlay;
+    opacity: var(--card-opacity);
+    transition: opacity 0.2s ease-out;
+}
+
+/* Placeholder card styles */
+.tarot-card.placeholder {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.tarot-card.placeholder .card-inner {
+    background: transparent;
+    border: 2px dashed var(--beige-dark);
+    box-shadow: none;
+}
+
+.tarot-card.placeholder .card-image {
+    background: transparent;
+    border-bottom: 1px dashed var(--beige-dark);
+}
+
+.tarot-card.placeholder .card-title,
+.tarot-card.placeholder .card-description {
     color: var(--text-muted);
-    transition: transform 0.2s ease, color 0.2s ease;
-    align-self: center;
 }
 
-.app-card:hover .app-arrow {
-    transform: translateX(4px);
-    color: var(--accent);
+.tarot-card.placeholder .card-placeholder svg {
+    color: var(--beige-dark);
 }
 
 /* Footer */

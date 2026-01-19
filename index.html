@@ -51,30 +51,46 @@
 
     <main class="app-grid">
         <!-- Breath App Card -->
-        <a href="apps/breath/index.html" class="app-card">
-            <div class="app-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <circle cx="12" cy="12" r="9"/>
-                    <path d="M12 8v4M12 16v.01"/>
-                </svg>
-            </div>
-            <div class="app-info">
-                <h2>Breath</h2>
-                <p>Track your breathing patterns with inhale, hold, exhale, and retention phases. Visualize your progress over time.</p>
-            </div>
-            <span class="app-arrow">&rarr;</span>
-        </a>
+        <div class="tarot-card">
+            <a href="apps/breath/index.html" class="card-rotator">
+                <div class="card-inner">
+                    <div class="card-image">
+                        <!-- Placeholder for tarot art -->
+                        <div class="card-placeholder">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                <circle cx="12" cy="12" r="8"/>
+                                <circle cx="12" cy="12" r="4"/>
+                                <path d="M12 2v4M12 18v4M2 12h4M18 12h4"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h2 class="card-title">Breath</h2>
+                        <p class="card-description">Track your breathing patterns</p>
+                    </div>
+                    <div class="card-iridescent"></div>
+                    <div class="card-shine"></div>
+                    <div class="card-glare"></div>
+                </div>
+            </a>
+        </div>
 
         <!-- Placeholder for future apps -->
-        <div class="app-card placeholder">
-            <div class="app-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M12 5v14M5 12h14"/>
-                </svg>
-            </div>
-            <div class="app-info">
-                <h2>More coming soon</h2>
-                <p>New apps will appear here as they're created.</p>
+        <div class="tarot-card placeholder">
+            <div class="card-rotator">
+                <div class="card-inner">
+                    <div class="card-image">
+                        <div class="card-placeholder">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                <path d="M12 5v14M5 12h14"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h2 class="card-title">Coming Soon</h2>
+                        <p class="card-description">More tools on the way</p>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -87,5 +103,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js"></script>
     <script src="loading.js"></script>
+    <script src="cards.js"></script>
 </body>
 </html>
