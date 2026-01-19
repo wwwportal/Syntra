@@ -1,16 +1,5 @@
-/* Same warm Anthropic-inspired palette */
+/* Observer colors from logo */
 :root {
-    --bg-primary: #FAF9F7;
-    --bg-secondary: #F3F1ED;
-    --beige: #E8E4DE;
-    --beige-dark: #D4CFC7;
-    --accent: #D97706;
-    --accent-dark: #B45309;
-    --text-primary: #4A4540;
-    --text-secondary: #7A756D;
-    --text-muted: #A8A29E;
-
-    /* Observer colors from logo */
     --obs-yellow: #F5C542;
     --obs-pink: #F5A3C7;
     --obs-green: #A3E048;
@@ -138,7 +127,7 @@ h1 {
     margin-top: 0.5rem;
 }
 
-/* App Grid with colorful gradient background for liquid glass effect */
+/* App Grid */
 .app-grid {
     flex: 1;
     display: flex;
@@ -150,47 +139,18 @@ h1 {
     margin: 0 auto;
     width: 100%;
     perspective: 1000px;
-    
-    /* Colorful gradient background - Apple-style */
-    background: 
-        radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 80% 50%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 50% 20%, rgba(255, 219, 120, 0.2) 0%, transparent 50%),
-        radial-gradient(circle at 50% 80%, rgba(120, 219, 255, 0.2) 0%, transparent 50%),
-        linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #fda085 100%);
-    background-size: 300% 300%;
-    background-attachment: fixed;
 }
 
-/* Tarot Card - Holographic Effect */
+/* Card - Liquid Glass with Tilt Effect */
 .tarot-card {
     --card-width: 220px;
     --card-ratio: 1.6;
     --card-radius: 12px;
-    
-    /* Soft opalescent/iridescent colors - pastel palette */
-    --holo-pink: hsl(320, 80%, 85%);
-    --holo-peach: hsl(30, 90%, 85%);
-    --holo-yellow: hsl(50, 90%, 85%);
-    --holo-mint: hsl(160, 70%, 82%);
-    --holo-cyan: hsl(185, 70%, 82%);
-    --holo-lavender: hsl(260, 70%, 88%);
-    --holo-violet: hsl(280, 60%, 85%);
-    
-    /* Dynamic values - updated by JS */
-    --pointer-x: 50%;
-    --pointer-y: 50%;
-    --pointer-from-center: 0;
-    --pointer-from-left: 0.5;
-    --pointer-from-top: 0.5;
-    --card-opacity: 0;
+
+    /* Dynamic values for tilt - updated by JS */
     --rotate-x: 0deg;
     --rotate-y: 0deg;
-    --background-x: 50%;
-    --background-y: 50%;
-    --viewing-angle: 0deg;
-    --tilt-intensity: 0;
-    
+
     width: var(--card-width);
     height: calc(var(--card-width) * var(--card-ratio));
     cursor: pointer;
@@ -212,55 +172,30 @@ h1 {
     position: relative;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
     border-radius: var(--card-radius);
     overflow: hidden;
-    transform-style: preserve-3d;
 
-    /* Apple liquid glass effect - transparent glass */
+    /* Simple liquid glass effect */
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow:
-        /* Soft shadow for depth */
-        0 8px 32px rgba(0, 0, 0, 0.1),
-        /* Glass reflection */
-        inset 0 1px 0 rgba(255, 255, 255, 0.4),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
 
     transition: all 0.3s ease;
 }
 
-/* VISIBLE THICKNESS BORDER - raised edge effect */
-.card-inner::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: var(--card-radius);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.5);
-    pointer-events: none;
-    z-index: 5;
-}
-
-/* Liquid glass hover effect */
+/* Hover effect */
 .tarot-card:hover .card-inner {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    transform: translateZ(10px);
-    box-shadow:
-        0 12px 40px rgba(0, 0, 0, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.6),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.16);
+    transform: translateY(-4px);
 }
 
 
 
-/* Card image area - transparent glass */
+/* Card image area */
 .card-image {
     position: relative;
     width: 100%;
@@ -268,12 +203,9 @@ h1 {
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.05);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     padding: 1rem;
     padding-bottom: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .card-art {
@@ -312,116 +244,22 @@ h1 {
 .card-title {
     font-size: 1.1rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--text-primary);
     margin-bottom: 0.25rem;
     letter-spacing: 0.02em;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .card-description {
     font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-secondary);
     line-height: 1.4;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-/*
-    LIQUID GLASS SHINE
-    Very subtle glass reflection
- */
-.card-shine {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    border-radius: var(--card-radius);
-    z-index: 1;
-
-    /* Glass-like sheen that follows the light */
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.1) 0%,
-            transparent 40%,
-            rgba(255, 255, 255, 0.05) 60%,
-            transparent 100%
-        );
-
-    background-size: 200% 200%;
-    background-position: var(--background-x) var(--background-y);
-
-    mix-blend-mode: overlay;
-    opacity: calc(var(--card-opacity) * 0.6);
-    transition: opacity 0.3s ease-out;
-}
-
-/*
-   SUBTLE LIQUID GLASS IRIDESCENCE
-   Much more subtle - just a hint of color shimmer
- */
-.card-iridescent {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    border-radius: var(--card-radius);
-    z-index: 2;
-    overflow: hidden;
-}
-
-.card-iridescent::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: var(--card-radius);
-
-    /* Very subtle rainbow shimmer following the light */
-    background:
-        radial-gradient(
-            ellipse at var(--pointer-x) var(--pointer-y),
-            rgba(255, 255, 255, 0.3) 0%,
-            rgba(255, 220, 180, 0.15) 10%,
-            rgba(180, 220, 255, 0.15) 20%,
-            transparent 30%
-        );
-
-    mix-blend-mode: screen;
-    opacity: calc(var(--card-opacity) * 0.4);
-    transition: opacity 0.2s ease-out;
-}
-
-/*
-   LIQUID GLASS GLARE
-   Soft light reflection on glass surface
- */
+/* Remove iridescent/shine/glare overlays */
+.card-shine,
+.card-iridescent,
 .card-glare {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    border-radius: var(--card-radius);
-    z-index: 4;
-
-    /* Softer radial gradient for glass surface */
-    background-image: radial-gradient(
-        farthest-corner circle at var(--pointer-x) var(--pointer-y),
-        rgba(255, 255, 255, 0.4) 5%,
-        rgba(255, 255, 255, 0.2) 15%,
-        transparent 35%
-    );
-
-    mix-blend-mode: overlay;
-    opacity: calc(var(--card-opacity) * 0.8);
-    transition: opacity 0.2s ease-out;
+    display: none;
 }
 
 /* Placeholder card styles */

@@ -1,16 +1,5 @@
-/* Anthropic-inspired color palette */
+/* Breath-specific colors */
 :root {
-    --bg-primary: #FAF9F7;
-    --bg-secondary: #F3F1ED;
-    --beige: #E8E4DE;
-    --beige-dark: #D4CFC7;
-    --accent: #D97706;
-    --accent-dark: #B45309;
-    --accent-darker: #92400E;
-    --text-primary: #4A4540;
-    --text-secondary: #7A756D;
-    --text-muted: #A8A29E;
-
     /* Chart colors - distinct for visibility */
     --inhale-color: #D97706;
     --hold-color: #0D9488;

@@ -2,11 +2,60 @@
 // Circles spiral inward along smooth bezier curves to form the logo
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Register the MotionPathPlugin
-    gsap.registerPlugin(MotionPathPlugin);
+    // Check if loading animation has already been shown this session
+    const hasSeenLoading = sessionStorage.getItem('hasSeenLoading');
 
     const loadingScreen = document.getElementById('loading-screen');
     const mainContent = document.getElementById('main-content');
+
+    if (hasSeenLoading) {
+        // Skip loading animation - show content immediately
+        loadingScreen.style.display = 'none';
+        mainContent.style.opacity = '1';
+
+        // But still position and show the logo in bottom-right corner
+        const container = document.querySelector('.loading-container');
+        const containerSize = 300;
+        const scale = 0.4;
+        const margin = 20;
+        const deadSpace = ((containerSize - 140) / 2) * scale;
+        const scaledSize = containerSize * scale;
+        const finalTop = window.innerHeight - scaledSize - margin + deadSpace;
+        const finalLeft = window.innerWidth - scaledSize - margin + deadSpace;
+
+        // Position logo immediately without animation
+        container.style.position = 'fixed';
+        container.style.top = finalTop + 'px';
+        container.style.left = finalLeft + 'px';
+        container.style.transform = `scale(${scale})`;
+        container.style.transformOrigin = 'top left';
+        container.style.pointerEvents = 'auto';
+        container.style.cursor = 'pointer';
+        container.style.zIndex = '10000';
+
+        // Make logo clickable to go home
+        container.addEventListener('click', () => {
+            window.location.href = '/';
+        });
+
+        // Add resize listener
+        function updateLogoPosition() {
+            const newFinalTop = window.innerHeight - scaledSize - margin + deadSpace;
+            const newFinalLeft = window.innerWidth - scaledSize - margin + deadSpace;
+            container.style.top = newFinalTop + 'px';
+            container.style.left = newFinalLeft + 'px';
+        }
+        window.addEventListener('resize', updateLogoPosition);
+
+        return;
+    }
+
+    // Mark that we've seen the loading animation
+    sessionStorage.setItem('hasSeenLoading', 'true');
+
+    // Register the MotionPathPlugin
+    gsap.registerPlugin(MotionPathPlugin);
+
     const star = document.getElementById('star');
     const centerCircle = document.getElementById('center-circle');
 
@@ -193,11 +242,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const finalTop = window.innerHeight - scaledSize - margin + deadSpace;
     const finalLeft = window.innerWidth - scaledSize - margin + deadSpace;
 
-    // Fade in main content
+    // Fade in main content with a smooth ease
     tl.to(mainContent, {
         opacity: 1,
-        duration: 0.6,
-        ease: "none"
+        duration: 0.8,
+        ease: "power2.out"
     }, holdTime);
 
     // Move the entire loading container to bottom-right
