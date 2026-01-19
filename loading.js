@@ -2,56 +2,10 @@
 // Circles spiral inward along smooth bezier curves to form the logo
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Check if loading animation has already been shown this session
-    const hasSeenLoading = sessionStorage.getItem('hasSeenLoading');
-
     const loadingScreen = document.getElementById('loading-screen');
     const mainContent = document.getElementById('main-content');
 
-    if (hasSeenLoading) {
-        // Skip loading animation - show content immediately
-        loadingScreen.style.display = 'none';
-        mainContent.style.opacity = '1';
-
-        // But still position and show the logo in bottom-right corner
-        const container = document.querySelector('.loading-container');
-        const containerSize = 300;
-        const scale = 0.4;
-        const margin = 20;
-        const deadSpace = ((containerSize - 140) / 2) * scale;
-        const scaledSize = containerSize * scale;
-        const finalTop = window.innerHeight - scaledSize - margin + deadSpace;
-        const finalLeft = window.innerWidth - scaledSize - margin + deadSpace;
-
-        // Position logo immediately without animation
-        container.style.position = 'fixed';
-        container.style.top = finalTop + 'px';
-        container.style.left = finalLeft + 'px';
-        container.style.transform = `scale(${scale})`;
-        container.style.transformOrigin = 'top left';
-        container.style.pointerEvents = 'auto';
-        container.style.cursor = 'pointer';
-        container.style.zIndex = '10000';
-
-        // Make logo clickable to go home
-        container.addEventListener('click', () => {
-            window.location.href = '/';
-        });
-
-        // Add resize listener
-        function updateLogoPosition() {
-            const newFinalTop = window.innerHeight - scaledSize - margin + deadSpace;
-            const newFinalLeft = window.innerWidth - scaledSize - margin + deadSpace;
-            container.style.top = newFinalTop + 'px';
-            container.style.left = newFinalLeft + 'px';
-        }
-        window.addEventListener('resize', updateLogoPosition);
-
-        return;
-    }
-
-    // Mark that we've seen the loading animation
-    sessionStorage.setItem('hasSeenLoading', 'true');
+    // Always show loading animation on portal index page
 
     // Register the MotionPathPlugin
     gsap.registerPlugin(MotionPathPlugin);
@@ -229,18 +183,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const holdTime = spiralDuration + 1.2;
     const moveToCornerDuration = 0.8;
 
-    const scale = 0.4;
-    const margin = 24;
+    const scale = 0.3;  // Reduced from 0.4 (25% smaller)
+    const margin = 16;  // Reduced from 24
     
     // Final position: bottom-right corner
     // Container is 300px, but the visible logo (~140px) is centered within it
-    // So there's ~80px of dead space on each side of the logo within the container
+    // Position logo in top-left corner with equal margins
+    // The logo is 140px within a 300px container, so there's ~80px of dead space on each side
     // When scaled to 0.4: container=120px, logo=~56px, dead space=~32px per side
     // We need to offset by the dead space so the visible logo has equal margins
     const scaledSize = containerSize * scale;
     const deadSpace = ((containerSize - 140) / 2) * scale; // ~32px scaled dead space
-    const finalTop = window.innerHeight - scaledSize - margin + deadSpace;
-    const finalLeft = window.innerWidth - scaledSize - margin + deadSpace;
+    const finalTop = margin - deadSpace;
+    const finalLeft = margin - deadSpace;
 
     // Fade in main content with a smooth ease
     tl.to(mainContent, {
@@ -259,9 +214,9 @@ document.addEventListener('DOMContentLoaded', () => {
         ease: "power2.inOut"
     }, holdTime);
 
-    // Fade out the black background, keeping the logo visible
+    // Fade out just the background color
     tl.to(loadingScreen, {
-        backgroundColor: 'transparent',
+        backgroundColor: 'rgba(0, 0, 0, 0)',
         duration: moveToCornerDuration,
         ease: "none"
     }, holdTime);
@@ -278,6 +233,9 @@ document.addEventListener('DOMContentLoaded', () => {
         container.style.pointerEvents = 'auto';
         container.style.cursor = 'pointer';
 
+        // Clear the inline filter style so CSS hover can work
+        star.style.filter = '';
+
         container.addEventListener('click', () => {
             window.location.href = '/';
         });
@@ -286,8 +244,8 @@ document.addEventListener('DOMContentLoaded', () => {
         function updateLogoPosition() {
             const scaledSize = containerSize * scale;
             const deadSpace = ((containerSize - 140) / 2) * scale;
-            const newFinalTop = window.innerHeight - scaledSize - margin + deadSpace;
-            const newFinalLeft = window.innerWidth - scaledSize - margin + deadSpace;
+            const newFinalTop = margin - deadSpace;
+            const newFinalLeft = margin - deadSpace;
 
             gsap.set(container, {
                 top: newFinalTop,
@@ -295,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Add resize listener to keep logo in bottom-right corner
+        // Add resize listener to keep logo in top-left corner
         window.addEventListener('resize', updateLogoPosition);
     }, holdTime + moveToCornerDuration);
 });

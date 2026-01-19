@@ -57,7 +57,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const translateY = viewportCenterY - cardCenterY;
 
             // Prevent page scrolling/resizing during animation
-            document.body.style.overflow = 'hidden';
+            // Use a wrapper element instead of body to preserve logo visibility
+            const mainContent = document.getElementById('main-content');
+            if (mainContent) {
+                mainContent.style.overflow = 'hidden';
+            }
 
             // Create animation timeline
             const tl = gsap.timeline({

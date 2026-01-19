@@ -38,11 +38,7 @@ header {
     text-align: center;
 }
 
-#home-view header .back-btn {
-    position: absolute;
-    left: 1.5rem;
-    top: 1.5rem;
-}
+/* Logo styles are now in global.css */
 
 #home-view header {
     position: relative;
