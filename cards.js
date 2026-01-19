@@ -112,6 +112,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 ease: "power2.out"
             }, 0);
 
+            // Fade out the loading screen (logo)
+            tl.to('#loading-screen', {
+                opacity: 0,
+                duration: 0.6,
+                ease: "power2.out"
+            }, 0);
+
             // Mark this card as clicked
             card.classList.add('clicked');
         });
