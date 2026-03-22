@@ -1,0 +1,138 @@
+name: Upload to Zenodo (Draft)
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'html-for-print/**'
+  workflow_dispatch:
+    inputs:
+      force_new_version:
+        description: 'Force create new version (even if unpublished)'
+        required: false
+        default: 'false'
+
+jobs:
+  upload-to-zenodo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get changed files
+        id: changed
+        uses: tj-actions/changed-files@v44
+        with:
+          files_yaml: |
+            html-for-print:
+              - html-for-print/**
+
+      - name: Check for changes
+        id: check
+        run: |
+          if [ -z "${{ steps.changed.outputs.html-for-print_all_changed_and_modified_files }}" ]; then
+            echo "No changes in html-for-print, skipping upload"
+            echo "should_upload=false" >> $GITHUB_OUTPUT
+          else
+            echo "Changes detected in html-for-print"
+            echo "should_upload=true" >> $GITHUB_OUTPUT
+            echo "Changed files: ${{ steps.changed.outputs.html-for-print_all_changed_and_modified_files }}"
+          fi
+
+      - name: Upload to Zenodo (if changes)
+        if: steps.check.outputs.should_upload == 'true'
+        env:
+          ZENODO_TOKEN: ${{ secrets.ZENODO_TOKEN }}
+          ZENODO_SANDBOX: ${{ secrets.ZENODO_SANDBOX }}
+        run: |
+          # Determine Zenodo URL (sandbox for testing)
+          if [ "$ZENODO_SANDBOX" = "true" ]; then
+            ZENODO_URL="https://sandbox.zenodo.org"
+          else
+            ZENODO_URL="https://zenodo.org"
+          fi
+          
+          echo "Using Zenodo: $ZENODO_URL"
+          
+          # Get or create deposit
+          if [ -n "${{ secrets.ZENODO_DEPOSIT_ID }}" ] && [ "${{ github.event.inputs.force_new_version }}" != "true" ]; then
+            DEPOSIT_ID="${{ secrets.ZENODO_DEPOSIT_ID }}"
+            echo "Using existing deposit: $DEPOSIT_ID"
+            
+            # Check if already published
+            STATUS=$(curl -s -H "Authorization: Bearer $ZENODO_TOKEN" \
+              "$ZENODO_URL/api/deposit/depositions/$DEPOSIT_ID" | \
+              python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('state','unsubmitted'))")
+            
+            if [ "$STATUS" = "done" ]; then
+              # Create new version
+              echo "Deposit is published, creating new version..."
+              NEW_VERSION=$(curl -s -X POST -H "Authorization: Bearer $ZENODO_TOKEN" \
+                "$ZENODO_URL/api/deposit/depositions/$DEPOSIT_ID/actions/newversion")
+              DEPOSIT_ID=$(echo "$NEW_VERSION" | python3 -c "import sys,json; print(json.load(sys.stdin)['id'])")
+              echo "New version ID: $DEPOSIT_ID"
+            fi
+          else
+            # Create new deposit
+            echo "Creating new deposit..."
+            NEW_DEP=$(curl -s -X POST -H "Authorization: Bearer $ZENODO_TOKEN" \
+              "$ZENODO_URL/api/deposit/depositions")
+            DEPOSIT_ID=$(echo "$NEW_DEP" | python3 -c "import sys,json; print(json.load(sys.stdin)['id'])")
+            echo "New deposit ID: $DEPOSIT_ID"
+          fi
+          
+          # Update metadata
+          curl -s -X PUT \
+            -H "Authorization: Bearer $ZENODO_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "metadata": {
+                "title": "Syntra Research Documentation",
+                "upload_type": "publication",
+                "publication_type": "report",
+                "description": "Open Quran Research documentation - auto-uploaded draft",
+                "creators": [{"name": "Syntra-Env", "affiliation": "Independent"}],
+                "keywords": ["Quran", "Arabic NLP", "Machine Learning", "Research"],
+                "license": "cc-by-4.0"
+              }
+            }' \
+            "$ZENODO_URL/api/deposit/depositions/$DEPOSIT_ID" | python3 -c "import sys,json; d=json.load(sys.stdin); print('Updated metadata:', d.get('title',''))"
+          
+          # Upload files
+          echo "Uploading files..."
+          for file in html-for-print/*.html; do
+            if [ -f "$file" ]; then
+              echo "Uploading: $file"
+              curl -s -X POST \
+                -H "Authorization: Bearer $ZENODO_TOKEN" \
+                -F "file=@$file" \
+                "$ZENODO_URL/api/deposit/depositions/$DEPOSIT_ID/files" | \
+                python3 -c "import sys,json; d=json.load(sys.stdin); print('Uploaded:', d.get('filename',''))"
+            fi
+          done
+          
+          # Upload Technical Design folder
+          for file in html-for-print/Technical\ Design\ Document/*.html; do
+            if [ -f "$file" ]; then
+              echo "Uploading: $file"
+              curl -s -X POST \
+                -H "Authorization: Bearer $ZENODO_TOKEN" \
+                -F "file=@\"$file\"" \
+                "$ZENODO_URL/api/deposit/depositions/$DEPOSIT_ID/files" | \
+                python3 -c "import sys,json; d=json.load(sys.stdin); print('Uploaded:', d.get('filename',''))"
+            fi
+          done
+          
+          # Save deposit ID as secret for next run
+          echo "Deposit ID: $DEPOSIT_ID"
+          echo "DEPOSIT_ID=$DEPOSIT_ID" >> $GITHUB_ENV
+          
+          # Note: GitHub secrets can't be updated via action, user must manually set:
+          # Settings → Secrets → ZENODO_DEPOSIT_ID = $DEPOSIT_ID
+          
+          echo "=== UPLOAD COMPLETE ==="
+          echo "Deposit ID: $DEPOSIT_ID"
+          echo "Draft URL: $ZENODO_URL/deposit/$DEPOSIT_ID"
+          echo ""
+          echo "NOTE: To update this secret for auto-versioning:"
+          echo "Go to repo Settings → Secrets → Add ZENODO_DEPOSIT_ID = $DEPOSIT_ID"
