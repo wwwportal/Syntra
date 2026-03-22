@@ -146,16 +146,16 @@ MIT License — See LICENSE file
 The full documentation with properly rendered mathematics is available in the `docs/` folder:
 
 ### Research Reports
-- [Scholar Mathematical Framework](docs/Scholar%20Mathematical%20Framework.html)
-- [Limits of the Mathematics](docs/Limits%20of%20the%20Mathematics.html)
+- [Scholar Mathematical Framework](Scholar%20Mathematical%20Framework.html)
+- [Limits of the Mathematics](Limits%20of%20the%20Mathematics.html)
 
 ### User Interface Design
-- [Search-Write Juxtaposition](docs/search-write-juxtaposition.html)
-- [Text Substitution Design Pattern](docs/text-substitution-design-pattern.html)
-- [Interpretation Verification](docs/interpretation-verification.html)
+- [Search-Write Juxtaposition](search-write-juxtaposition.html)
+- [Text Substitution Design Pattern](text-substitution-design-pattern.html)
+- [Interpretation Verification](interpretation-verification.html)
 
 ### Technical Design Documents
-- [Technical Design Document Index](docs/Technical%20Design%20Document/index.html)
-- [Syntra Core Context and Goals](docs/Technical%20Design%20Document/syntra-core-context-and-goals.html)
-- [Syntra Technical Implementation](docs/Technical%20Design%20Document/syntra-technical-implementation.html)
-- [Syntra Ecosystem Overview](docs/Technical%20Design%20Document/syntra-ecosystem-overview.html)
+- [Technical Design Document Index](Technical%20Design%20Document/index.html)
+- [Syntra Core Context and Goals](Technical%20Design%20Document/syntra-core-context-and-goals.html)
+- [Syntra Technical Implementation](Technical%20Design%20Document/syntra-technical-implementation.html)
+- [Syntra Ecosystem Overview](Technical%20Design%20Document/syntra-ecosystem-overview.html)

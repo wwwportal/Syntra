@@ -1,51 +1,49 @@
-# Syntra
+# Starlight Starter Kit: Basics
 
-*Towards Free Agency for All.*
+[![Built with Starlight](https://astro.badg.es/v2/built-with-starlight/tiny.svg)](https://starlight.astro.build)
 
-Syntra explores how to make personal AI agency universally accessible — lightweight agents that run on edge devices, protect users from psychological manipulation, and provide proactive guidance without being intrusive.
-
-## Core ideas
-
-- **Edge-first agents** — fast, local models that run on consumer hardware without cloud dependency
-- **Manipulation defense** — agents that identify and shield users from dark patterns, deceptive design, and persuasion techniques
-- **Proactive but respectful** — useful guidance that surfaces at the right time without becoming noise
-
-More to come.
-
-## Blog
-
-The site includes a Markdown blog. To add a post:
-
-1. Drop a `.md` file in `posts/` with frontmatter:
-
-```markdown
----
-title: My Post
-date: 2026-03-01
----
-
-Content here.
+```
+pnpm create astro@latest -- --template starlight
 ```
 
-2. Add an entry to `card-data.js`:
+> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
 
-```javascript
-{
-    title: 'My Post',
-    description: 'A short description',
-    slug: 'my-post',
-    date: '2026-03-01',
-    draft: false,
-    type: 'md'
-}
+## 🚀 Project Structure
+
+Inside of your Astro + Starlight project, you'll see the following folders and files:
+
+```
+.
+├── public/
+├── src/
+│   ├── assets/
+│   ├── content/
+│   │   └── docs/
+│   └── content.config.ts
+├── astro.config.mjs
+├── package.json
+└── tsconfig.json
 ```
 
-3. Commit and push.
+Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
 
-## Local development
+Images can be added to `src/assets/` and embedded in Markdown with a relative link.
 
-```bash
-python -m http.server 8080
-```
+Static assets, like favicons, can be placed in the `public/` directory.
 
-Hosted on GitHub Pages from `master`. The `.nojekyll` file ensures `.md` files are served raw.
+## 🧞 Commands
+
+All commands are run from the root of the project, from a terminal:
+
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `pnpm install`             | Installs dependencies                            |
+| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
+| `pnpm build`           | Build your production site to `./dist/`          |
+| `pnpm preview`         | Preview your build locally, before deploying     |
+| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+
+## 👀 Want to learn more?
+
+Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
