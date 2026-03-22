@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Latin+Modern+Roman:ital,wght@0,400;0,700;1,400&display=swap');
+
+@page {
+  size: A4;
+  margin: 1in;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Latin Modern Roman", "Computer Modern", serif;
+  font-size: 14pt;
+  line-height: 1.55;
+  color: #1a1a1a;
+  max-width: 7.5in;
+  margin: 0 auto;
+  padding: 0.75in 0;
+}
+
+@media print {
+  body { padding: 0; max-width: none; }
+}
+
+h1 {
+  font-size: 28pt;
+  text-align: center;
+  margin-bottom: 0.2em;
+  border: none;
+}
+h2 {
+  font-size: 20pt;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 0.2em;
+  margin-top: 1.5em;
+}
+h3 {
+  font-size: 17pt;
+  margin-top: 1.2em;
+  color: #2a2a2a;
+}
+h4 {
+  font-size: 15pt;
+  margin-top: 1em;
+}
+
+.page-break { page-break-before: always; }
+
+.abstract {
+  max-width: 5.8in;
+  margin: 1.2em auto 2em;
+  font-style: italic;
+  color: #333;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.toc {
+  max-width: 5in;
+  margin: 0 auto 1em;
+}
+.toc h2 { font-size: 18pt; margin-bottom: 0.4em; }
+.toc ol { padding-left: 1.4em; }
+.toc li { margin: 0.25em 0; }
+.toc a { text-decoration: none; color: #2a5db0; }
+.toc a:hover { text-decoration: underline; }
+
+p { margin: 0.6em 0; }
+ul, ol { margin: 0.5em 0; padding-left: 1.5em; }
+li { margin: 0.25em 0; }
+
+.eq {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+  overflow: visible;
+}
+
+mjx-container {
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+  max-width: none !important;
+}
+mjx-container > svg {
+  max-width: none !important;
+}
+.MathJax {
+  overflow: visible !important;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 1em auto;
+  font-size: 13pt;
+}
+th, td {
+  padding: 0.35em 0.9em;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+th {
+  border-bottom: 2px solid #888;
+  font-weight: 600;
+}
+caption {
+  caption-side: bottom;
+  font-size: 12pt;
+  color: #555;
+  margin-top: 0.4em;
+}
+
+a { color: #2a5db0; }
+a:hover { color: #1a4a90; }
+
+blockquote {
+  margin: 1em 0;
+  padding: 0.5em 1em;
+  border-left: 3px solid #ccc;
+  font-style: italic;
+  color: #555;
+}
+
+code {
+  font-family: "Latin Modern Mono", "Computer Modern", monospace;
+  font-size: 0.9em;
+  background: #f4f4f4;
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+}
+
+pre {
+  background: #f4f4f4;
+  padding: 1em;
+  overflow-x: auto;
+  border-radius: 5px;
+  font-size: 0.85em;
+  line-height: 1.4;
+}
+pre code {
+  background: none;
+  padding: 0;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 16pt;
+  color: #555;
+  margin-bottom: 0.5em;
+}
+
+.date {
+  text-align: center;
+  font-size: 11pt;
+  color: #777;
+  margin-bottom: 2em;
+}
