@@ -27,8 +27,7 @@ jobs:
         run: |
           wget https://github.com/quarto-dev/quarto-cli/releases/download/v1.9.36/quarto-1.9.36-linux-amd64.tar.gz
           tar -xzf quarto-1.9.36-linux-amd64.tar.gz
-          ls -la
-          sudo cp -r quarto-1.9.36-linux-amd64/quarto /usr/local/bin/
+          sudo cp -r quarto-1.9.36/quarto /usr/local/bin/
           quarto --version
 
       - name: Render Quarto
