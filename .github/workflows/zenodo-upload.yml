@@ -45,9 +45,10 @@ jobs:
             DEPOSIT_ID=$(cat "${{ env.ZENODO_DEPOSIT_FILE }}")
             echo "Using existing deposit: $DEPOSIT_ID"
             
-            STATUS=$(curl -s -H "Authorization: Bearer $ZENODO_TOKEN" \
-              "$ZENODO_URL/api/deposit/depositions/$DEPOSIT_ID" | \
-              python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('state','unsubmitted'))")
+            STATUS_RESPONSE=$(curl -s -H "Authorization: Bearer $ZENODO_TOKEN" \
+              "$ZENODO_URL/api/deposit/depositions/$DEPOSIT_ID")
+            echo "Status Response: $STATUS_RESPONSE"
+            STATUS=$(echo "$STATUS_RESPONSE" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('state','unsubmitted'))")
             
             if [ "$STATUS" = "done" ]; then
               echo "Deposit is published, creating new version..."
@@ -60,7 +61,13 @@ jobs:
             echo "Creating new deposit..."
             NEW_DEP=$(curl -s -X POST -H "Authorization: Bearer $ZENODO_TOKEN" \
               "$ZENODO_URL/api/deposit/depositions")
-            DEPOSIT_ID=$(echo "$NEW_DEP" | python3 -c "import sys,json; print(json.load(sys.stdin)['id'])")
+            echo "API Response: $NEW_DEP"
+            DEPOSIT_ID=$(echo "$NEW_DEP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('id', d.get('error', 'NO_ID')))")
+            if [ "$DEPOSIT_ID" = "NO_ID" ]; then
+              echo "ERROR: Failed to create deposit"
+              echo "Response: $NEW_DEP"
+              exit 1
+            fi
             echo "New deposit ID: $DEPOSIT_ID"
           fi
           
