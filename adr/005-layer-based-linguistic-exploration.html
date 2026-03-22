@@ -1,32 +1,59 @@
-# ADR 005: Layer-Based Linguistic Exploration (Remove `inspect`)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="../styles.css">
+<meta charset="utf-8">
+<title>ADR 005: Layer-Based Linguistic Exploration (Remove `inspect`)</title>
+</head>
+<body>
+<h1>ADR 005: Layer-Based Linguistic Exploration (Remove <code>inspect</code>)</h1>
 
-## Status
+<h2>Status</h2>
+<p>
 Accepted
+</p>
 
-## Date
+<h2>Date</h2>
+<p>
 2025-12-14
+</p>
 
-## Context
-Kalima originally provided an `inspect` command that printed a large, monolithic linguistic analysis view.
+<h2>Context</h2>
+<p>
+Kalima originally provided an <code>inspect</code> command that printed a large, monolithic linguistic analysis view.
 As the UI grew, this became harder to maintain and harder to scan during normal reading/annotation workflows.
+</p>
 
+<p>
 We also introduced a token-level "layer" system in the frontend where users can swap the visible token overlay
 between different linguistic fields (root, lemma, POS, pattern, dependency, etc.) without losing the verse context.
+</p>
 
-## Decision
-Adopt the layer system as the primary way to explore linguistic data in the UI and remove the legacy `inspect` command
+<h2>Decision</h2>
+<p>
+Adopt the layer system as the primary way to explore linguistic data in the UI and remove the legacy <code>inspect</code> command
 from the CLI surface (and from help/docs).
+</p>
 
-## Rationale
-- Keeps the verse in view while exploring a single dimension of morphology/syntax.
-- Reduces large "wall of text" outputs that require scrolling.
-- Encourages a consistent UI pattern (switch layers) instead of special-case commands.
+<h2>Rationale</h2>
+<ul>
+<li>Keeps the verse in view while exploring a single dimension of morphology/syntax.</li>
+<li>Reduces large "wall of text" outputs that require scrolling.</li>
+<li>Encourages a consistent UI pattern (switch layers) instead of special-case commands.</li>
+</ul>
 
-## Consequences
-- Users explore linguistic details via `layer <name|number>` and `layer next|prev`.
-- Any future "summary" view should be designed as a dedicated UI component rather than a CLI text dump.
-- Documentation and command laws must reference `layer` instead of `inspect`.
+<h2>Consequences</h2>
+<ul>
+<li>Users explore linguistic details via <code>layer <name|number></code> and <code>layer next|prev</code>.</li>
+<li>Any future "summary" view should be designed as a dedicated UI component rather than a CLI text dump.</li>
+<li>Documentation and command laws must reference <code>layer</code> instead of <code>inspect</code>.</li>
+</ul>
 
-## Alternatives Considered
-- Keep `inspect` and add layers: rejected to avoid two overlapping ways to do the same thing.
-- Replace `inspect` with a different text-based command: rejected in favor of UI-native interaction.
+<h2>Alternatives Considered</h2>
+<ul>
+<li>Keep <code>inspect</code> and add layers: rejected to avoid two overlapping ways to do the same thing.</li>
+<li>Replace <code>inspect</code> with a different text-based command: rejected in favor of UI-native interaction.</li>
+</ul>
+
+</body>
+</html>

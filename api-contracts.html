@@ -1,9 +1,20 @@
-# API Contracts (Minimal)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<title>API Contracts (Minimal)</title>
+</head>
+<body>
+<h1>API Contracts (Minimal)</h1>
 
+<p>
 These capture the shapes the desktop CLI relies on. Treat them as contracts for both server and clients/tests.
+</p>
 
-## `GET /api/verse/{surah}/{ayah}`
-```json
+<h2><code>GET /api/verse/{surah}/{ayah}</code></h2>
+<code>`</code>json
+<p>
 {
   "surah": { "number": 1, "name": "..." },
   "ayah": 1,
@@ -20,17 +31,19 @@ These capture the shapes the desktop CLI relies on. Treat them as contracts for 
           "pos": "...",
           "type": "...",
           "role": "...",
-          "derived_noun_type": "...",
+          "derived<em>noun</em>type": "...",
           "state": "..."
         }
       ]
     }
   ]
 }
-```
+</p>
+<code>`</code>
 
-## `GET /api/morphology/{surah}/{ayah}`
-```json
+<h2><code>GET /api/morphology/{surah}/{ayah}</code></h2>
+<code>`</code>json
+<p>
 {
   "surah": 1,
   "ayah": 1,
@@ -48,15 +61,17 @@ These capture the shapes the desktop CLI relies on. Treat them as contracts for 
       "number": "...",
       "definiteness": "...",
       "determiner": true,
-      "derived_noun_type": "...",
+      "derived<em>noun</em>type": "...",
       "state": "..."
     }
   ]
 }
-```
+</p>
+<code>`</code>
 
-## `GET /api/dependency/{surah}/{ayah}`
-```json
+<h2><code>GET /api/dependency/{surah}/{ayah}</code></h2>
+<code>`</code>json
+<p>
 {
   "surah": 1,
   "ayah": 1,
@@ -68,12 +83,20 @@ These capture the shapes the desktop CLI relies on. Treat them as contracts for 
     }
   ]
 }
-```
+</p>
+<code>`</code>
 
-## Invariants
-- `surah >= 1`, `ayah >= 1`.
-- `tokens[*].segments` may be empty but must be present.
-- Morphology entries should preserve `text`, `pos`, `root`, `form` when known; optional fields are null/omitted.
-- Dependency entries should include `rel_label` and `word`; `pos` optional.
+<h2>Invariants</h2>
+<ul>
+<li><code>surah >= 1</code>, <code>ayah >= 1</code>.</li>
+<li><code>tokens[*].segments</code> may be empty but must be present.</li>
+<li>Morphology entries should preserve <code>text</code>, <code>pos</code>, <code>root</code>, <code>form</code> when known; optional fields are null/omitted.</li>
+<li>Dependency entries should include <code>rel_label</code> and <code>word</code>; <code>pos</code> optional.</li>
+</ul>
 
+<p>
 Use these shapes when creating fixtures and when validating responses in contract tests.
+</p>
+
+</body>
+</html>
