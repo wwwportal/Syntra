@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<title>Quran DSL</title>
+</head>
+<body>
+<h1>Quran DSL</h1>
+
+<p>Domain-specific language and interface specifications for Quranic analysis.</p>
+
+<h2>Core Concepts</h2>
+
+<h3>References</h3>
+<p>Quranic references use the format <code>surah:ayah</code> (e.g., <code>1:1</code> for Al-Fatiha verse 1).</p>
+
+<h3>Layers</h3>
+<p>The verse text can be explored through different linguistic layers:</p>
+<ul>
+<li><strong>Text</strong> - Raw Arabic text</li>
+<li><strong>Root</strong> - Triliteral root (ف ع ل)</li>
+<li><strong>Lemma</strong> - Dictionary form</li>
+<li><strong>POS</strong> - Part of speech (V, N, PREP, etc.)</li>
+<li><strong>Pattern</strong> - Morphological pattern (فَعِيل, مُفَعِّل)</li>
+<li><strong>Dependency</strong> - Syntactic relations</li>
+</ul>
+
+<h2>Data Structures</h2>
+
+<h3>Verse Response</h3>
+<code>
+GET /api/verse/{surah}/{ayah}
+</code>
+<pre><code>{
+  "surah": { "number": 1, "name": "..." },
+  "ayah": 1,
+  "text": "...",
+  "tokens": [
+    {
+      "index": 0,
+      "text": "...",
+      "form": "...",
+      "segments": [
+        {
+          "id": "...",
+          "root": "...",
+          "pos": "...",
+          "type": "...",
+          "role": "...",
+          "derived_noun_type": "...",
+          "state": "..."
+        }
+      ]
+    }
+  ]
+}</code></pre>
+
+<h3>Morphology Response</h3>
+<code>
+GET /api/morphology/{surah}/{ayah}
+</code>
+<pre><code>{
+  "surah": 1,
+  "ayah": 1,
+  "morphology": [
+    {
+      "text": "...",
+      "pos": "...",
+      "root": "...",
+      "form": "...",
+      "type": "...",
+      "dependency_rel": "...",
+      "role": "...",
+      "case": "...",
+      "gender": "...",
+      "number": "...",
+      "definiteness": "...",
+      "determiner": true,
+      "derived_noun_type": "...",
+      "state": "..."
+    }
+  ]
+}</code></pre>
+
+<h3>Dependency Response</h3>
+<code>
+GET /api/dependency/{surah}/{ayah}
+</code>
+<pre><code>{
+  "surah": 1,
+  "ayah": 1,
+  "dependency_tree": [
+    {
+      "rel_label": "subj",
+      "word": "...",
+      "pos": "N"
+    }
+  ]
+}</code></pre>
+
+<h2>Invariants</h2>
+<ul>
+<li><code>surah >= 1</code>, <code>ayah >= 1</code></li>
+<li><code>tokens[*].segments</code> may be empty but must be present</li>
+<li>Morphology entries should preserve <code>text</code>, <code>pos</code>, <code>root</code>, <code>form</code> when known</li>
+<li>Dependency entries should include <code>rel_label</code> and <code>word</code></li>
+</ul>
+
+<h2>Command Interface</h2>
+
+<p>Minimal algebraic-style laws for CLI behavior. Each command is modeled as a function on <code>(state, output)</code> where <code>state = { current_verse }</code>.</p>
+
+<h3>Commands</h3>
+<ul>
+<li><code>clear</code>: <code>state' = state</code>, <code>output' = ∅</code></li>
+<li><code>see chapter n</code>: <code>state'.current_verse = verse(n,1)</code>, <code>output' = render(surah n)</code></li>
+<li><code>see verse a</code>: <code>state'.current_verse = verse(v.surah, a)</code></li>
+<li><code>see verse s:a</code>: <code>state'.current_verse = verse(s, a)</code></li>
+<li><code>layer &lt;name|number&gt;</code>: Switch visible token overlay</li>
+<li><code>layer next|prev</code>: Navigate between layers</li>
+</ul>
+
+<h3>Rendering Invariants</h3>
+<ul>
+<li><code>render(verse)</code> always includes <code>surah:ayah</code> and token forms/text</li>
+<li>If morphology is available, includes root | pos | type | form for each segment</li>
+<li>Dependency render lists relation → word (and POS when present)</li>
+</ul>
+
+<h2>Usage</h2>
+<p>These contracts serve as acceptance criteria for tests and future refinements. Use when creating fixtures and validating responses.</p>
+
+</body>
+</html>
