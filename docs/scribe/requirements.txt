@@ -1,5 +1,0 @@
-faster-whisper
-openai-whisper
-flask
-yt-dlp
-ffmpeg-python

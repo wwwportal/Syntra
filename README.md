@@ -1,49 +1,20 @@
-# Starlight Starter Kit: Basics
+# Syntra Research Documentation
 
-[![Built with Starlight](https://astro.badg.es/v2/built-with-starlight/tiny.svg)](https://starlight.astro.build)
+Research documents on mathematical frameworks, theological interpretation systems, and technical design patterns.
 
-```
-pnpm create astro@latest -- --template starlight
-```
+## Documents
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+- [Kalima Mathematical Framework](Kalima%20Mathematical%20Framework.html)
+- [Limits of the Mathematics](Limits%20of%20the%20Mathematics.html)
+- [Technical Design Document](Technical%20Design%20Document/)
+- [Interpretation Verification](interpretation-verification.html)
+- [Search Write Juxtaposition](search-write-juxtaposition.html)
+- [Text Substitution Design Pattern](text-substitution-design-pattern.html)
 
-## 🚀 Project Structure
+## Building PDFs
 
-Inside of your Astro + Starlight project, you'll see the following folders and files:
+Print any HTML document to PDF from your browser for best Arabic/math rendering.
 
-```
-.
-├── public/
-├── src/
-│   ├── assets/
-│   ├── content/
-│   │   └── docs/
-│   └── content.config.ts
-├── astro.config.mjs
-├── package.json
-└── tsconfig.json
-```
+## Zenodo
 
-Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
-
-Images can be added to `src/assets/` and embedded in Markdown with a relative link.
-
-Static assets, like favicons, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+Archived versions are automatically uploaded to [Zenodo](https://zenodo.org) as drafts on changes.
