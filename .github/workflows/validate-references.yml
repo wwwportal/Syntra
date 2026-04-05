@@ -1,0 +1,117 @@
+name: Validate References
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    paths:
+      - 'references.html'
+
+jobs:
+  validate-references:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate references
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          
+          echo "=== Checking citation structure ==="
+          
+          # Check 1: Each [n] in references should be a link to #ref-n
+          echo "Checking citation anchor links..."
+          CITATION_COUNT=$(grep -oP '<li id="ref-[0-9]+">' references.html | wc -l)
+          echo "Found $CITATION_COUNT citation entries with proper IDs"
+          
+          if [ "$CITATION_COUNT" -ne 74 ]; then
+            echo "ERROR: Expected 74 citations, found $CITATION_COUNT"
+            exit 1
+          fi
+          
+          # Check 2: Each URL should be wrapped in <a href="...">
+          echo ""
+          echo "Checking URL links..."
+          URL_COUNT=$(grep -oP 'href="https?://[^"]+"' references.html | wc -l)
+          echo "Found $URL_COUNT URLs with proper href tags"
+          
+          if [ "$URL_COUNT" -lt 74 ]; then
+            echo "ERROR: Expected at least 74 URLs with href, found $URL_COUNT"
+            exit 1
+          fi
+          
+          echo ""
+          echo "=== Checking URL accessibility ==="
+          
+          # Extract all unique URLs from href attributes
+          URLS=$(grep -oP 'href="https?://[^"]+"' references.html | sed 's/href="//;s/"$//' | sort -u)
+          
+          TOTAL=$(echo "$URLS" | wc -l)
+          echo "Total URLs to validate: $TOTAL"
+          echo ""
+          
+          PASSED=0
+          FAILED=0
+          
+          PUBLICATION_DOMAINS="arxiv.org|researchgate.net|semantic-web-journal.net|springer.com|elsevier.com|sciencedirect.com|aclanthology.org|ieee.org|acm.org|doi.org"
+          
+          RELIABLE_DOMAINS="github.com|github.io|google.com|cloudflare.com|wikipedia.org|archive.org"
+          
+          while IFS= read -r URL; do
+            [ -z "$URL" ] && continue
+            
+            DOMAIN=$(echo "$URL" | sed -E 's|https?://([^/]+).*|\1|' | tr '[:upper:]' '[:lower:]')
+            
+            if echo "$RELIABLE_DOMAINS" | grep -q "$DOMAIN"; then
+              HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -L --max-redirs 2 --connect-timeout 5 --max-time 10 "$URL" 2>/dev/null || echo "000")
+              if [[ "$HTTP_CODE" == "200" ]] || [[ "$HTTP_CODE" == "301" ]] || [[ "$HTTP_CODE" == "302" ]]; then
+                echo "[PASS] $URL (HTTP $HTTP_CODE)"
+                PASSED=$((PASSED + 1))
+              else
+                echo "[FAIL] $URL (HTTP $HTTP_CODE)"
+                FAILED=$((FAILED + 1))
+              fi
+              continue
+            fi
+            
+            IS_PUBLICATION=false
+            if echo "$PUBLICATION_DOMAINS" | grep -q "$DOMAIN"; then
+              IS_PUBLICATION=true
+            fi
+            
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -L --max-redirs 2 --connect-timeout 10 --max-time 30 "$URL" 2>/dev/null || echo "000")
+            
+            if [[ "$HTTP_CODE" == "200" ]] || [[ "$HTTP_CODE" == "301" ]] || [[ "$HTTP_CODE" == "302" ]]; then
+              echo "[PASS] $URL (HTTP $HTTP_CODE)"
+              PASSED=$((PASSED + 1))
+            elif [[ "$HTTP_CODE" == "404" ]] || [[ "$HTTP_CODE" == "000" ]]; then
+              echo "[FAIL] $URL (HTTP $HTTP_CODE)"
+              FAILED=$((FAILED + 1))
+            else
+              if echo "$IS_PUBLICATION" | grep -q "true"; then
+                CONTENT=$(curl -s -L --max-redirs 2 --connect-timeout 10 --max-time 30 "$URL" 2>/dev/null | head -c 500)
+                if [ -n "$CONTENT" ]; then
+                  echo "[PASS] $URL (HTTP $HTTP_CODE, content verified)"
+                  PASSED=$((PASSED + 1))
+                else
+                  echo "[FAIL] $URL (HTTP $HTTP_CODE, no content)"
+                  FAILED=$((FAILED + 1))
+                fi
+              else
+                echo "[WARN] $URL (HTTP $HTTP_CODE)"
+                PASSED=$((PASSED + 1))
+              fi
+            fi
+          done <<< "$URLS"
+          
+          echo ""
+          echo "===== SUMMARY ====="
+          echo "Passed: $PASSED"
+          echo "Failed: $FAILED"
+          
+          if [ $FAILED -gt 0 ]; then
+            echo ""
+            echo "Some URLs failed validation. Check output above for details."
+            exit 1
+          fi
