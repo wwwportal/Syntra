@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<title>Chapter 7: kalima-mcp — MCP Server & Tools</title>
+</head>
+<body>
+
+<h1 id="s1">Chapter 7: kalima-mcp — MCP Server & Tools</h1>
+
+<p>The MCP server that exposes kalima-math capabilities as tools, backed by kalima-db.</p>
+
+<nav class="toc">
+<h2 id="s0-toc">Contents</h2>
+<ol>
+  <li><a href="#s1">Overview</a></li>
+  <li><a href="#s2">Tools</a></li>
+  <li><a href="#s3">Architecture</a></li>
+  <li><a href="#s4">Running</a></li>
+</ol>
+</nav>
+
+<hr>
+
+<h2 id="s1">Overview</h2>
+
+<p>kalima-mcp is a Model Context Protocol (MCP) server that provides tools for Quranic analysis. It connects to kalima-db for data and uses kalima-math for computations.</p>
+
+<p><strong>Repository:</strong> <a href="https://github.com/Syntra-Env/kalima-mcp">GitHub: Syntra-Env/kalima-mcp</a></p>
+
+<p>The MCP protocol allows any AI assistant (Claude, Cursor, etc.) to use these tools directly.</p>
+
+<hr>
+
+<h2 id="s2">Tools</h2>
+
+<p>Available tools include:</p>
+
+<table>
+<thead><tr><th>Tool</th><th>Description</th></tr></thead>
+<tbody>
+  <tr><td><code>get_verse_with_context</code></td><td>Get verse text with word morphemes and root analysis</td></tr>
+  <tr><td><code>compare_with_traditional</code></td><td>Compare analysis with traditional tafsir (Sahih International)</td></tr>
+  <tr><td><code>detect_boundaries</code></td><td>Detect speaker/topic boundaries in a passage</td></tr>
+  <tr><td><code>analyze_verse_emphasis</code></td><td>Analyze which features carry emphasis in a verse</td></tr>
+  <tr><td><code>decompose_address</code></td><td>Decompose a UOR address into components</td></tr>
+  <tr><td><code>locate_identity</code></td><td>Find entities by their UOR address</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2 id="s3">Architecture</h2>
+
+<p>The MCP server:</p>
+
+<ol>
+  <li>Receives requests via stdio (MCP protocol)</li>
+  <li>Queries kalima-db for data</li>
+  <li>Passes data through kalima-math functions</li>
+  <li>Returns results to the client</li>
+</ol>
+
+<pre>
+┌──────────────┐     ┌─────────────┐     ┌─────────────┐
+│   Client    │ ──► │ kalima-mcp  │ ──► │ kalima-db   │
+│ (Claude,    │     │ (MCP server)│     │ (SQLite)    │
+│  Cursor)    │ ◄── └──────┬──────┘ ◄── └──────┬──────┘
+└──────────────┘            │                  │
+                            ↓                  │
+                      ┌─────────────┐          │
+                      │ kalima-math │ ◄────────┘
+                      │ (computation)│
+                      └─────────────┘
+</pre>
+
+<hr>
+
+<h2 id="s4">Running</h2>
+
+<p>Run locally:</p>
+
+<pre><code>pip install scholar-mcp-server
+scholar</code></pre>
+
+<p>Or via Docker:</p>
+
+<pre><code>docker run ghcr.io/syntra-env/kalima-mcp:latest</code></pre>
+
+<nav class="chapter-nav">
+  <a href="database.html">← Chapter 6: kalima-db</a>
+  <span></span>
+  <a href="quran-dsl.html">Chapter 8: Quran DSL →</a>
+</nav>
+
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<title>Chapter 6: kalima-db — Database</title>
+</head>
+<body>
+
+<h1 id="s1">Chapter 6: kalima-db — Database</h1>
+
+<p>The Quranic dataset that powers all analysis. Stored on HuggingFace, downloaded on first use.</p>
+
+<nav class="toc">
+<h2 id="s0-toc">Contents</h2>
+<ol>
+  <li><a href="#s1">Overview</a></li>
+  <li><a href="#s2">Data Structure</a></li>
+  <li><a href="#s3">Storage & Distribution</a></li>
+  <li><a href="#s4">Access</a></li>
+</ol>
+</nav>
+
+<hr>
+
+<h2 id="s1">Overview</h2>
+
+<p>kalima-db is a SQLite database containing the Quranic text with full morphological annotation. It serves as the foundation for all analysis performed by kalima-mcp and kalima-math.</p>
+
+<p><strong>Location:</strong> <a href="https://huggingface.co/datasets/Syntra-Env/kalima-db">HuggingFace: Syntra-Env/kalima-db</a></p>
+
+<p>The database is automatically downloaded on first use by kalima-mcp, or can be manually downloaded using the HuggingFace Hub API.</p>
+
+<hr>
+
+<h2 id="s2">Data Structure</h2>
+
+<p>The database contains:</p>
+
+<ul>
+  <li><strong>Text content:</strong> The Quranic text (Arabic and normalized)</li>
+  <li><strong>Morphological features:</strong> Root, POS, verb form, aspect, person, number, gender, case</li>
+  <li><strong>Linguistic annotations:</strong> Word types, word instances, morpheme types</li>
+  <li><strong>Reference data:</strong> Traditional tafsir translations (Sahih International)</li>
+</ul>
+
+<hr>
+
+<h2 id="s3">Storage & Distribution</h2>
+
+<p>The database is:</p>
+
+<ul>
+  <li>Stored as <code>kalima.db</code> on HuggingFace Datasets</li>
+  <li>Downloaded via <code>huggingface_hub</code> on first run</li>
+  <li>Cached locally at <code>~/.scholar/data/kalima.db</code></li>
+</ul>
+
+<p>This approach keeps the repository lightweight (no large binary files in git) while ensuring the data is versioned and accessible.</p>
+
+<hr>
+
+<h2 id="s4">Access</h2>
+
+<p>Access via kalima-mcp tools, or directly through the database layer in kalima-mcp:</p>
+
+<pre><code>from src.db import get_connection
+conn = get_connection()</code></pre>
+
+<p>Manual download:</p>
+
+<pre><code>from huggingface_hub import hf_hub_download
+db_path = hf_hub_download(repo_id="Syntra-Env/kalima-db", filename="kalima.db", repo_type="dataset")</code></pre>
+
+<nav class="chapter-nav">
+  <a href="math-framework.html">← Chapter 5: kalima-math</a>
+  <span></span>
+  <a href="database-investigation.html">Chapter 7: kalima-mcp →</a>
+</nav>
+
+</body>
+</html>
