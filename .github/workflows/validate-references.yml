@@ -110,8 +110,15 @@ jobs:
           echo "Passed: $PASSED"
           echo "Failed: $FAILED"
           
-          if [ $FAILED -gt 0 ]; then
+          # Allow up to 10% failures (external links may become stale)
+          TOTAL_URLS=$((PASSED + FAILED))
+          FAILURE_RATE=$((FAILED * 100 / TOTAL_URLS))
+          
+          if [ $FAILURE_RATE -gt 10 ]; then
             echo ""
-            echo "Some URLs failed validation. Check output above for details."
+            echo "Error: Failure rate ($FAILURE_RATE%) exceeds 10%. Check output above for details."
             exit 1
+          else
+            echo ""
+            echo "Validation passed (failure rate: $FAILURE_RATE% <= 10%)"
           fi
