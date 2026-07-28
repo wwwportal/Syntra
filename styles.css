@@ -178,7 +178,9 @@ pre code {
 /* ---------- navigation terminal ----------
    Styled as the document's critical apparatus: a hairline rule at the foot of
    the page and a second, machine voice set in the same mono face as <code>.
-   No panel, no chrome -- it belongs to the paper, not to the browser. */
+   The prompt is always live in the bar; the output panel above it appears only
+   when a command prints something. No panel, no chrome -- it belongs to the
+   paper, not to the browser. */
 
 .term {
   position: fixed;
@@ -200,66 +202,13 @@ pre code {
   padding: 0 20px;
 }
 
-.term-bar {
-  display: flex;
-  align-items: baseline;
-  gap: 2em;
-  padding: 0.5em 0;
-}
-
-.term-open {
-  flex: 1 1 auto;
-  min-width: 0;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: none;
-  font: inherit;
-  color: #2a5db0;
-  text-align: left;
-  cursor: pointer;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.term-open:hover { color: #1a4a90; }
-.term-open:focus-visible {
-  outline: 1px dotted #2a5db0;
-  outline-offset: 3px;
-}
-
-.term-cursor {
-  display: inline-block;
-  width: 0.5em;
-  height: 0.95em;
-  margin-left: 0.15em;
-  vertical-align: -0.1em;
-  background: #2a5db0;
-  animation: term-blink 1.15s steps(1) infinite;
-}
-@keyframes term-blink { 50% { opacity: 0; } }
-
-/* The next chapter, where the old prev/next buttons used to sit. */
-.term-next {
-  flex: none;
-  color: #2a5db0;
-  text-decoration: none;
-  font-size: 0.9em;
-}
-.term-next:hover { text-decoration: underline; }
-.term-next:focus-visible {
-  outline: 1px dotted #2a5db0;
-  outline-offset: 3px;
-}
-
-.term-is-open .term-open { color: #777; }
-.term-is-open .term-cursor { display: none; }
-
+/* Output panel: sits above the prompt, hidden until something is printed. */
 .term-body {
   display: flex;
   flex-direction: column;
-  height: 38vh;
-  min-height: 170px;
+  height: 34vh;
+  min-height: 150px;
+  border-bottom: 1px solid #eee;
 }
 /* A class selector outranks the UA rule for [hidden], so restate it. */
 .term-body[hidden] { display: none; }
@@ -267,7 +216,7 @@ pre code {
 .term-out {
   flex: 1;
   overflow-y: auto;
-  padding: 0.1em 0 0.5em;
+  padding: 0.5em 0;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   color: #1a1a1a;
@@ -277,16 +226,24 @@ pre code {
 }
 .term-out::-webkit-scrollbar { width: 0; height: 0; display: none; }
 
-.term-form {
+/* The always-ready command line. */
+.term-bar {
   display: flex;
   align-items: baseline;
-  gap: 0.5em;
-  padding: 0 0 0.85em;
-  border-top: 1px solid #eee;
-  padding-top: 0.5em;
+  gap: 2em;
+  padding: 0.5em 0;
+  cursor: text;
 }
 
-/* Also the collapse control -- clicking the prompt closes the terminal. */
+.term-form {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  align-items: baseline;
+  gap: 0.5em;
+}
+
+/* Also the output toggle -- clicking the prompt shows or hides past output. */
 .term-prompt {
   flex: none;
   margin: 0;
@@ -326,6 +283,21 @@ pre code {
   outline: 0;
   box-shadow: none;
 }
+.term-input::placeholder { color: #a0a0a0; opacity: 1; }
+.term-input:focus::placeholder { color: #c8c8c8; }
+
+/* The next chapter, where the old prev/next buttons used to sit. */
+.term-next {
+  flex: none;
+  color: #2a5db0;
+  text-decoration: none;
+  font-size: 0.9em;
+}
+.term-next:hover { text-decoration: underline; }
+.term-next:focus-visible {
+  outline: 1px dotted #2a5db0;
+  outline-offset: 3px;
+}
 
 .term-line { margin: 0; }
 .term-dim { color: #777; }
@@ -335,20 +307,37 @@ pre code {
 
 /* Keep the bar off the end of the document. */
 body { padding-bottom: 3.2em; }
-body.has-open-terminal { padding-bottom: calc(38vh + 3.2em); }
+body.has-open-terminal { padding-bottom: calc(34vh + 3.2em); }
 
 @media (max-width: 800px) {
   .term { font-size: 11pt; }
   .term-next { display: none; }
-  .term-body { height: 46vh; }
-  body.has-open-terminal { padding-bottom: calc(46vh + 3.2em); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .term-cursor { animation: none; }
+  .term-body { height: 42vh; }
+  body.has-open-terminal { padding-bottom: calc(42vh + 3.2em); }
 }
 
 @media print {
   .term { display: none; }
   body, body.has-open-terminal { padding-bottom: 0; }
+}
+
+/* Front-page contents: a numbered entry per chapter, each with its own note. */
+.contents {
+  padding-left: 1.6em;
+  margin: 1.6em 0 0;
+}
+.contents > li {
+  margin: 0 0 1.5em;
+  padding-left: 0.3em;
+}
+.contents > li > a {
+  font-size: 1.06em;
+  font-weight: bold;
+  text-decoration: none;
+}
+.contents > li > a:hover { text-decoration: underline; }
+.contents > li > p {
+  margin: 0.25em 0 0;
+  text-align: justify;
+  hyphens: auto;
 }
