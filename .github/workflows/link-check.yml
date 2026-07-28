@@ -1,4 +1,4 @@
-name: Dead Link Check
+name: Site Checks
 
 on:
   push:
@@ -7,10 +7,14 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  check-links:
+  check-site:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Check for dead internal links
         run: python3 tools/check-links.py
+
+      - name: Check every page shares the same shell
+        if: always()
+        run: python3 tools/check-pages.py

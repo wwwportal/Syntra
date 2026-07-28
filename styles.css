@@ -286,10 +286,22 @@ pre code {
   padding-top: 0.5em;
 }
 
+/* Also the collapse control -- clicking the prompt closes the terminal. */
 .term-prompt {
   flex: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
   color: #2a5db0;
   white-space: nowrap;
+  cursor: pointer;
+}
+.term-prompt:hover { color: #1a4a90; }
+.term-prompt:focus-visible {
+  outline: 1px dotted #2a5db0;
+  outline-offset: 3px;
 }
 
 /* A bare caret on paper -- no field, no border, no ring. */

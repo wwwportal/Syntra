@@ -150,7 +150,8 @@
         '<div class="term-body" id="term-body" hidden>' +
           '<div class="term-out" role="log" aria-live="polite"></div>' +
           '<form class="term-form" autocomplete="off">' +
-            '<label class="term-prompt" for="term-input"></label>' +
+            '<button class="term-prompt" type="button" aria-controls="term-body"' +
+              ' aria-expanded="true" title="Collapse the terminal"></button>' +
             '<input class="term-input" id="term-input" type="text" spellcheck="false"' +
               ' autocapitalize="off" autocorrect="off" aria-label="terminal input">' +
           '</form>' +
@@ -445,7 +446,9 @@
     var cmdHistory = recalled ? JSON.parse(recalled) : [];
     var cursor = cmdHistory.length;
 
+    // Either prompt toggles: the bar opens it, the one by the input closes it.
     el.bar.addEventListener("click", function () { setOpen(el.body.hidden); });
+    el.prompt.addEventListener("click", function () { setOpen(false); el.bar.focus(); });
 
     el.form.addEventListener("submit", function (e) {
       e.preventDefault();
