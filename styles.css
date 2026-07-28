@@ -271,7 +271,11 @@ pre code {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   color: #1a1a1a;
+  /* Scrolls, but shows no bar -- a rule of chrome would break the paper. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
+.term-out::-webkit-scrollbar { width: 0; height: 0; display: none; }
 
 .term-form {
   display: flex;
