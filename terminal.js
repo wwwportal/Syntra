@@ -13,24 +13,35 @@
 (function () {
   "use strict";
 
+  // Reading order. `reading: false` marks pages kept for reference but outside
+  // the sequence, so next/prev walk the book the way the old nav buttons did.
   var PAGES = [
-    { file: "index.html",                     slug: "home",           label: "Home" },
-    { file: "journey.html",                   slug: "introduction",   label: "How we got here" },
-    { file: "methodology.html",               slug: "methodology",    label: "Core interpretive principles" },
-    { file: "background.html",                slug: "background",     label: "History and literature review" },
-    { file: "architecture.html",              slug: "architecture",   label: "How projects connect" },
-    { file: "database.html",                  slug: "kalima-db",      label: "Database" },
-    { file: "mcp.html",                       slug: "kalima-mcp",     label: "MCP server, tools & DSL" },
-    { file: "math-framework.html",            slug: "kalima-math",    label: "Mathematical framework" },
-    { file: "democratizing-ai.html",          slug: "kalima-ml",      label: "Democratizing AI" },
-    { file: "references.html",                slug: "references",     label: "Bibliography" },
-    { file: "quran-dsl.html",                 slug: "quran-dsl",      label: "DSL specification" },
-    { file: "literature-review.html",         slug: "literature-review", label: "Quranic NLP landscape" },
-    { file: "quran-computation-history.html", slug: "quran-computation-history", label: "From concordances to NLP" }
+    { file: "index.html",            slug: "home",         label: "Home",                      reading: true },
+    { file: "journey.html",          slug: "introduction", label: "How we got here",           reading: true },
+    { file: "methodology.html",      slug: "methodology",  label: "Core interpretive principles", reading: true },
+    { file: "background.html",       slug: "background",   label: "History and literature review", reading: true },
+    { file: "architecture.html",     slug: "architecture", label: "How projects connect",      reading: true },
+    { file: "database.html",         slug: "kalima-db",    label: "Database",                  reading: true },
+    { file: "mcp.html",              slug: "kalima-mcp",   label: "MCP server, tools & DSL",   reading: true },
+    { file: "math-framework.html",   slug: "kalima-math",  label: "Mathematical framework",    reading: true },
+    { file: "democratizing-ai.html", slug: "kalima-ml",    label: "Democratizing AI",          reading: true },
+    { file: "references.html",       slug: "references",   label: "Bibliography",              reading: true },
+    { file: "quran-dsl.html",                 slug: "quran-dsl",                 label: "DSL specification",       reading: false },
+    { file: "literature-review.html",         slug: "literature-review",         label: "Quranic NLP landscape",   reading: false },
+    { file: "quran-computation-history.html", slug: "quran-computation-history", label: "From concordances to NLP", reading: false }
   ];
+
+  var READING = PAGES.filter(function (p) { return p.reading; });
+  var ASIDE = PAGES.filter(function (p) { return !p.reading; });
 
   var byFile = {}, bySlug = {};
   PAGES.forEach(function (p) { byFile[p.file] = p; bySlug[p.slug] = p; });
+
+  function step(page, delta) {
+    var i = READING.indexOf(page);
+    if (i === -1) return null;
+    return READING[i + delta] || null;
+  }
 
   /* ---------- current location ---------- */
 
@@ -119,36 +130,55 @@
 
   var el = {};
 
+  function promptText() {
+    return "yassine@syntra:" + cwd + "$";
+  }
+
   function build() {
     var root = document.createElement("div");
     root.className = "term";
+    // The collapsed bar is the prompt itself -- it says where you are, so it
+    // needs no label, and carries the next chapter where the nav button was.
     root.innerHTML =
-      '<button class="term-bar" type="button" aria-expanded="false" aria-controls="term-body">' +
-        '<span class="term-dot"></span>' +
-        '<span class="term-title">terminal</span>' +
-        '<span class="term-hint">ctrl + `</span>' +
-      '</button>' +
-      '<div class="term-body" id="term-body" hidden>' +
-        '<div class="term-out" role="log" aria-live="polite"></div>' +
-        '<form class="term-form" autocomplete="off">' +
-          '<label class="term-prompt" for="term-input"></label>' +
-          '<input class="term-input" id="term-input" type="text" spellcheck="false"' +
-            ' autocapitalize="off" autocorrect="off" aria-label="terminal input">' +
-        '</form>' +
+      '<div class="term-inner">' +
+        '<div class="term-bar">' +
+          '<button class="term-open" type="button" aria-expanded="false" aria-controls="term-body">' +
+            '<span class="term-open-text"></span><span class="term-cursor"></span>' +
+          '</button>' +
+          '<a class="term-next" hidden></a>' +
+        '</div>' +
+        '<div class="term-body" id="term-body" hidden>' +
+          '<div class="term-out" role="log" aria-live="polite"></div>' +
+          '<form class="term-form" autocomplete="off">' +
+            '<label class="term-prompt" for="term-input"></label>' +
+            '<input class="term-input" id="term-input" type="text" spellcheck="false"' +
+              ' autocapitalize="off" autocorrect="off" aria-label="terminal input">' +
+          '</form>' +
+        '</div>' +
       '</div>';
     document.body.appendChild(root);
 
     el.root = root;
-    el.bar = root.querySelector(".term-bar");
+    el.bar = root.querySelector(".term-open");
+    el.barText = root.querySelector(".term-open-text");
+    el.next = root.querySelector(".term-next");
     el.body = root.querySelector(".term-body");
     el.out = root.querySelector(".term-out");
     el.form = root.querySelector(".term-form");
     el.input = root.querySelector(".term-input");
     el.prompt = root.querySelector(".term-prompt");
+
+    var ahead = step(here, 1);
+    if (ahead) {
+      el.next.href = ahead.file;
+      el.next.textContent = ahead.slug + " →";
+      el.next.hidden = false;
+    }
   }
 
   function setPrompt() {
-    el.prompt.textContent = "yassine@syntra:" + cwd + "$";
+    el.prompt.textContent = promptText();
+    el.barText.textContent = promptText() + " ";
   }
 
   function write(text, cls) {
@@ -192,10 +222,27 @@
     setTimeout(function () { location.href = url; }, 120);
   }
 
+  function hop(delta, name) {
+    if (!here.reading) {
+      write(name + ": " + here.slug + " sits outside the reading order", "term-err");
+      write("`cd /` for the contents.", "term-dim");
+      return;
+    }
+    var target = step(here, delta);
+    if (!target) {
+      write(name + ": " + (delta > 0 ? "last chapter" : "first chapter"), "term-dim");
+      return;
+    }
+    go(target.file);
+  }
+
   function listRoot() {
-    columns(PAGES.map(function (p) { return p.slug + "/"; }));
+    columns(READING.map(function (p) { return p.slug + "/"; }));
     write("");
-    write(PAGES.length + " pages. `cd <name>` to open one, `ls <name>` to peek inside.", "term-dim");
+    write("also, outside the reading order:", "term-dim");
+    columns(ASIDE.map(function (p) { return p.slug + "/"; }));
+    write("");
+    write("`cd <name>` opens one, `ls <name>` peeks inside, `next` moves on.", "term-dim");
   }
 
   function listPage(page) {
@@ -219,17 +266,21 @@
     help: function () {
       [
         "ls [path]      list pages, or the sections of a page",
-        "cd <path>      go to a page or section  (cd .. , cd / , cd -)",
-        "cat <path>     same as cd, for a section",
+        "cd <path>      go to a page or section  (cd .. , cd /)",
+        "next           the next chapter in reading order",
+        "prev           the previous chapter",
         "pwd            print the current path",
         "tree           show the whole site",
-        "open <path>    open a page or section",
+        "open <path>    open a page or section  (also: cat)",
         "clear          clear the screen",
         "help           this list"
       ].forEach(function (l) { write("  " + l); });
       write("");
       write("Tab completes. Up/Down walks history. Ctrl+` or Esc closes.", "term-dim");
     },
+
+    next: function () { return hop(1, "next"); },
+    prev: function () { return hop(-1, "prev"); },
 
     pwd: function () { write(cwd); },
 
@@ -293,10 +344,15 @@
 
     tree: function () {
       write("/");
-      PAGES.forEach(function (p, i) {
-        var last = i === PAGES.length - 1;
-        write((last ? "└── " : "├── ") + p.slug + "/" +
+      READING.forEach(function (p) {
+        write("├── " + p.slug + "/" +
               new Array(Math.max(2, 26 - p.slug.length)).join(" ") + p.label);
+      });
+      write("│");
+      ASIDE.forEach(function (p, i) {
+        var last = i === ASIDE.length - 1;
+        write((last ? "└── " : "├── ") + p.slug + "/" +
+              new Array(Math.max(2, 26 - p.slug.length)).join(" ") + p.label, "term-dim");
       });
     }
   };
@@ -380,8 +436,8 @@
     build();
     setPrompt();
 
-    write("Syntra terminal — navigate the site by path.", "term-ok");
-    write("`ls` to look around, `cd <name>` to move, `help` for everything else.", "term-dim");
+    write("`ls` to look around, `cd <name>` to move, `next` to read on.", "term-dim");
+    write("`help` for the rest.", "term-dim");
     write("");
 
     // Command history, restored across page loads so `cd`-ing around keeps it.
