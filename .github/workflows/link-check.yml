@@ -1,0 +1,16 @@
+name: Dead Link Check
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  check-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for dead internal links
+        run: python3 tools/check-links.py
