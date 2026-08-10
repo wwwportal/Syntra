@@ -22,10 +22,6 @@ A Java application for managing NFL team operations, tracking coaches, players, 
 
 A safety-verifying software-to-hardware compiler that bridges high-level continuous-variable (CV) logic with silicon-photonic programmable processors. It parses Blackbird CV code, solves continuous voltage trajectories on the geometric phase space, formally verifies them against hardware safety constraints, and streams the resulting waveforms to the DACs driving the photonic chip — proving properties of the waveforms it emits rather than proving the compiler itself.
 
-### [SunnySide](https://github.com/wwwportal/SunnySide)
-
-An interactive geometric proof engine — a symbolic-expression-driven laboratory for exploring parallel transport and holonomy on statistical manifolds. It visualizes how curvature in information geometry (Fisher-Rao metrics on probability simplices) makes the order of operations matter, letting users compose laws of motion from operators and watch holonomy and curvature drift as the space deforms.
-
 ## Tools
 
 ### [brightspace-cli](https://github.com/wwwportal/brightspace-cli)
