@@ -7,12 +7,12 @@
 - [Structural](https://github.com/wwwportal/Structural) — civil engineering Prolog DSL compiler
 - [NFL-Operations-Management-System](https://github.com/wwwportal/NFL-Operations-Management-System)
 - [Pulse](https://github.com/wwwportal/Pulse)
-- [Scribe](https://github.com/wwwportal/Scribe)
 - [SunnySide](https://github.com/wwwportal/SunnySide)
 
 ## Tools
 
 - [brightspace-cli](https://github.com/wwwportal/brightspace-cli)
+- [Scribe](https://github.com/wwwportal/Scribe)
 
 ## Prototypes
 
