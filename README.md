@@ -14,7 +14,7 @@ A C++ student grade tracking system with a Nana GUI for entering, storing, and r
 
 A civil engineering domain-specific language and compiler written in Prolog, letting structural engineering problems be expressed declaratively and solved using logic-programming techniques rather than general-purpose imperative code.
 
-### [NFL-Operations-Management-System](https://github.com/wwwportal/NFL-Operations-Management-System)
+### [Operations-Management-System](https://github.com/wwwportal/NFL-Operations-Management-System)
 
 A Java application for managing NFL team operations, tracking coaches, players, teams, and games through CSV-backed data files, with generated Javadoc documentation covering the full class hierarchy.
 
