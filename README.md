@@ -11,6 +11,13 @@
 - [maze-generator-c](https://github.com/wwwportal/maze-generator-c) — A C program that generates and solves randomized mazes.
 - [soggy-coaster-accounting](https://github.com/wwwportal/soggy-coaster-accounting) — A C program for tracking a roller coaster park's food, drink, and show inventory.
 - [cc-validation-68hc12](https://github.com/wwwportal/cc-validation-68hc12) — A 68HCS12 assembly program that validates credit card numbers and drives hex displays.
+- [epistemic-game-engine](https://github.com/wwwportal/epistemic-game-engine) — A Java simulation combining epistemic reasoning, potential-field agent navigation, and a text-adventure layer.
+- [hr-database-erd-design](https://github.com/wwwportal/hr-database-erd-design) — An HR database ER design with conceptual/physical diagrams and a generated MySQL schema.
+- [java-tcp-client-server](https://github.com/wwwportal/java-tcp-client-server) — A basic TCP client/server pair in Java.
+- [java-socket-programming](https://github.com/wwwportal/java-socket-programming) — Small Java socket programming exercises: area-calc client/server, multithreaded echo server, address utilities.
+- [battery-checker](https://github.com/wwwportal/battery-checker) — A Java program that checks battery dimensions against a tolerance and validates a user's order.
+- [cylinder-pyramid-volume-calculator](https://github.com/wwwportal/cylinder-pyramid-volume-calculator) — A Java CLI tool that computes the volume of a stepped cylinder pyramid.
+- [dice-roller-counter](https://github.com/wwwportal/dice-roller-counter) — A Java program that rolls a die 10 times and counts each outcome.
 
 ## Tools
 
@@ -32,3 +39,7 @@ Smaller exercises from coursework, grouped by language/topic since none is subst
 - [asm-68hc12-practice](https://github.com/wwwportal/asm-68hc12-practice) — Small 68HC12/68HCS12 assembly exercises from a processor architecture course.
 - [c-practice](https://github.com/wwwportal/c-practice) — Small C exercises from a C programming course.
 - [web-dev-practice](https://github.com/wwwportal/web-dev-practice) — Small web development exercises from an introductory web dev course.
+- [java-programming-practice](https://github.com/wwwportal/java-programming-practice) — Small Java exercises from an introductory programming course.
+- [java-oop-practice](https://github.com/wwwportal/java-oop-practice) — Small Java exercises from an object-oriented programming course.
+- [sql-database-practice](https://github.com/wwwportal/sql-database-practice) — Small SQL exercises and scripts from a database course.
+- [linux-practice](https://github.com/wwwportal/linux-practice) — Small draft shell scripts from a Linux course.
