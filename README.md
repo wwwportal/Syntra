@@ -28,18 +28,3 @@
 
 - [textSound-prototype](https://github.com/wwwportal/textSound-prototype) — A polyphonic microtonal mixer synthesizing audio carriers across a 72-EDO tuning matrix. Live: https://wwwportal.github.io/textSound-prototype/
 - [rihla-prototype](https://github.com/wwwportal/rihla-prototype) — "Rihla" (Arabic for journey) — an interactive piece for tracing paths on a sphere. Live: https://wwwportal.github.io/rihla-prototype/
-
-## Course Practice
-
-Smaller exercises from coursework, grouped by language/topic since none is substantial enough to stand alone.
-
-- [java-data-structures-practice](https://github.com/wwwportal/java-data-structures-practice) — Small Java exercises from a data structures course.
-- [r-numerical-computing-practice](https://github.com/wwwportal/r-numerical-computing-practice) — Small R exercises from a numerical computing course.
-- [cpp-practice](https://github.com/wwwportal/cpp-practice) — Small exercises and tools from a C++ programming course.
-- [asm-68hc12-practice](https://github.com/wwwportal/asm-68hc12-practice) — Small 68HC12/68HCS12 assembly exercises from a processor architecture course.
-- [c-practice](https://github.com/wwwportal/c-practice) — Small C exercises from a C programming course.
-- [web-dev-practice](https://github.com/wwwportal/web-dev-practice) — Small web development exercises from an introductory web dev course.
-- [java-programming-practice](https://github.com/wwwportal/java-programming-practice) — Small Java exercises from an introductory programming course.
-- [java-oop-practice](https://github.com/wwwportal/java-oop-practice) — Small Java exercises from an object-oriented programming course.
-- [sql-database-practice](https://github.com/wwwportal/sql-database-practice) — Small SQL exercises and scripts from a database course.
-- [linux-practice](https://github.com/wwwportal/linux-practice) — Small draft shell scripts from a Linux course.
